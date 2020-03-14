@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Card form{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <h3 class="mb-3">Create a new card</h3>
+    <div class="error alert alert-danger mb-2 d-none"></div>
+
+    {{ form_start(form, {'action': path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')), 'method': 'POST', 'enctype': 'multipart/form-data'}) }}
+
+    <div class="form-row">
+        <div class="col">
+            {{ form_row(form.name) }}
+        </div>
+
+        <div class="col">
+            {{ form_row(form.category) }}
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col">
+            {{ form_row(form.health) }}
+        </div>
+
+        <div class="col">
+            {{ form_row(form.attack) }}
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col">
+            {{ form_row(form.cost) }}
+        </div>
+
+        <div class="col">
+            {{ form_row(form.image, {
+                attr: {
+                    'placeholder': 'Select an article image'
+                }}) }}
+        </div>
+    </div>
+
+    <div class="text-center p-2 bg-light">
+        {{ form_row(form.specialCapacities) }}
+    </div>
+
+    <div class="text-center mt-3">
+        {{ form_row(form.submit) }}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

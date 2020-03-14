@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome!{% endblock %}
+
+{% block body %}
+    <nav class="navbar navbar-expand-lg ftco_navbar ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <div class="navbar-brand">Card app</div>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span> Menu
+            </button>
+
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="{{ path('deck_list') }}" class="nav-link menu">Decks</a></li>
+                    <li class="nav-item"><a href="{{ path('card_list') }}" class="nav-link menu">Card</a></li>
+                    <li class="nav-item"><a href="{{ path('card_add') }}" class="nav-link menu">Add card</a></li>
+                    <li class="nav-item"><a href="{{ path('category_list') }}" class="nav-link menu">Category</a></li>
+                    <li class="nav-item"><a href="{{ path('category_add') }}" class="nav-link menu">Add category</a></li>
+                    <li class="nav-item"><a href="{{ path('capacity_list') }}" class="nav-link menu">Capacities</a></li>
+                    <li class="nav-item"><a href="{{ path('capacity_add') }}" class="nav-link menu">Add capacity</a></li>
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <li class="nav-item cta"><a href="{{ path('app_logout') }}" class="nav-link bg-danger border-danger"><span>Logout</span></a></li>
+                    {% else %}
+                        <li class="nav-item cta"><a href="{{ path('app_login') }}" class="nav-link mr-3"><span>Login</span></a></li>
+                        <li class="nav-item cta"><a href="{{ path('app_register') }}" class="nav-link"><span>Register</span></a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mt-7 d-none loader text-center">
+        <div class="spinner-border" style="width: 3em; height: 3em;"></div>
+    </div>
+{#    <div class="text-center mt-6 d-none loader"><img src='{{ asset('assets/img/loading.gif') }}' width='200'></div>#}
+
+    <div class="container mt-head p-4 bg-white rounded mb-4" id="pageContent">
+        <h5>Select a choice in the menu.</h5>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        function showLoader(){
+            $('.loader').removeClass('d-none');
+            $('#pageContent').addClass('d-none');
+        }
+
+        function hideLoader(){
+            $('.loader').addClass('d-none');
+            $('#pageContent').removeClass('d-none');
+        }
+
+        $(document).on('change', '.custom-file-input', function () {
+            let fileName = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+            $(this).parent('.custom-file').find('.custom-file-label').text(fileName);
+        });
+
+        $(document).ready(function () {
+            $('.nav-link.menu').click(function (e) {
+                e.preventDefault();
+                showLoader();
+
+                $('.nav-link').each(function () {
+                    $(this).removeClass('active');
+                });
+
+                $(this).addClass('active');
+
+                $('#pageContent').load($(this).attr('href'), null, () => {
+                    hideLoader();
+                });
+
+            });
+
+            $('#pageContent').on('submit', 'form', function (e) {
+                e.preventDefault();
+                showLoader();
+
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: new FormData(this),
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if(response === 'error'){
+                            $('.error').append('An error has been occurred. Please verify your data !');
+                            $('.error').removeClass('d-none');
+                            hideLoader();
+                        }else{
+                            $('#pageContent').load($('.active').attr('href'), null, () => {
+                                hideLoader();
+                            });
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '.btnAction', function (e) {
+                e.preventDefault();
+                showLoader();
+
+                $('#pageContent').load($(this).attr('href'), null, () => {
+                    hideLoader();
+                });
+            });
+
+            $(document).on('click', '.btnDelete', function (e) {
+                e.preventDefault();
+                showLoader();
+
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('href'),
+                    success: function (response) {
+                        $('#pageContent').load(response, null, () => {
+                            hideLoader();
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

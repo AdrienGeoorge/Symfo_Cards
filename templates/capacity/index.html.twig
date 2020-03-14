@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Capacity list{% endblock %}
+
+{% block body %}
+    <h3 class="mb-3">List of special capacities</h3>
+
+    {% if entities is empty %}
+        <h5>This list is empty.</h5>
+    {% else %}
+        <div class="row">
+            {% for entity in entities %}
+                <div class="col-3 p-1">
+                    <div class="bg-light rounded p-3">
+                        <h6>{{ entity.name }} <small>({{ entity.time }} seconds)</small></h6>
+                        <a href="{{ path('capacity_delete', {'id': entity.id}) }}" class="btn btn-danger btnDelete"><i
+                                    class="fas fa-times"></i></a>
+                        <a href="{{ path('capacity_update', {'id': entity.id}) }}" class="btn btn-info btnAction"><i
+                                    class="fas fa-cog"></i></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

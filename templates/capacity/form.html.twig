@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Capacity form{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <h3 class="mb-3">Create a new special capacity</h3>
+
+    {{ form_start(form, {'action': path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')), 'method': 'POST'}) }}
+
+    <div class="form-row">
+        <div class="col">
+            {{ form_row(form.name) }}
+        </div>
+
+        <div class="col">
+            {{ form_row(form.time) }}
+        </div>
+    </div>
+
+    <div class="text-center">
+        {{ form_row(form.submit) }}
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}

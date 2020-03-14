@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Card list{% endblock %}
+
+{% block body %}
+    <h3 class="mb-3">List of categories</h3>
+
+    {% if entities is empty %}
+        <h5>This list is empty.</h5>
+    {% else %}
+        <div class="row">
+            {% for entity in entities %}
+                <div class="col-3 p-1">
+                    <div class="bg-light rounded p-3">
+                        <h6>{{ entity.name }}</h6>
+                        <a href="{{ path('category_delete', {'id': entity.id}) }}" class="btn btn-danger btnDelete"><i
+                                    class="fas fa-times"></i></a>
+                        <a href="{{ path('category_update', {'id': entity.id}) }}" class="btn btn-info btnAction"><i
+                                    class="fas fa-cog"></i></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

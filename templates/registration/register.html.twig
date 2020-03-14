@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <nav class="navbar navbar-expand-lg ftco_navbar ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <div class="navbar-brand">Card app</div>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item cta"><a href="{{ path('app_login') }}" class="nav-link mr-3"><span>Login</span></a></li>
+                <li class="nav-item cta"><a href="{{ path('app_register') }}" class="nav-link"><span>Register</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-head p-4 bg-white rounded" id="pageContent">
+        <h3 class="mb-3">Register</h3>
+
+        {{ form_start(form) }}
+            <div class="w-50">
+                {{ form_row(form.email) }}
+                {{ form_row(form.plainPassword) }}
+                {{ form_row(form.agreeTerms) }}
+
+                <button class="btn btn-info">Register</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
